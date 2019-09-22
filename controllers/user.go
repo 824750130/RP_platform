@@ -12,9 +12,12 @@ import (
 type RegisterController struct {
 	MainController
 }
+type LoginController struct {
+	MainController
+}
 
 func (this *RegisterController) Post() {
-
+	//register api
 	res := make(map[string]interface{})
 	json.Unmarshal(this.Ctx.Input.RequestBody, &res)
 	code := res["code"].(string)
@@ -26,27 +29,36 @@ func (this *RegisterController) Post() {
 		appsecret,
 		code,
 	)
+	//openId
 	req := httplib.Get(openidUrl)
 	str, _ := req.String()
 	openidInfo := make(map[string]string)
 	json.Unmarshal([]byte(str), &openidInfo)
 	openid := openidInfo["openid"]
-	//openId
 
 	o := orm.NewOrm()
-	user := models.User{}
 
-	user.OpenId = openid
-	user.Avatar = res["avatar"].(string)
-	user.City = res["city"].(string)
-	user.Province = res["province"].(string)
-	user.Country = res["country"].(string)
-	user.NickName = res["nickName"].(string)
+	newUser := models.User{}
+	newAccount := models.AccountInfo{}
 
-	_, err := o.Insert(&user)
-	if err != nil {
-		this.Error("录入失败")
-	} else {
-		this.Error("录入成功")
-	}
+	newUser.OpenId = openid
+	newUser.Avatar = res["avatar"].(string)
+	newUser.City = res["city"].(string)
+	newUser.Province = res["province"].(string)
+	newUser.Country = res["country"].(string)
+	newUser.NickName = res["nickName"].(string)
+	newAccount.User = &newUser
+	o.Insert(&newUser)
+	o.Insert(&newAccount)
+
+	this.Success("录入成功", map[string]string{"openid": openid})
 }
+
+//func (this *LoginController) Post() {
+//	//登录
+//	o := orm.NewOrm()
+//	var user models.User
+//	qs := o.QueryTable("user")
+//	userobj := qs.Filter("open_id", openid).One(&user)
+//	fmt.Println(userobj)
+//}
