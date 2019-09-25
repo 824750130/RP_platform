@@ -17,14 +17,14 @@ type User struct {
 	CreatedTime time.Time    `orm:"column(create_time);auto_now_add;type(datetime)"`
 	Inviter     *User        `orm:"column(inviter);null;rel(fk);on_delete(set_null)"`
 	User        []*User      `orm:"reverse(many)"`
-	AccountInfo *AccountInfo `orm:"reverse(one)"`
+	AccountInfo *AccountInfo `orm:"rel(one);on_delete(cascade)"`
 }
 
 type AccountInfo struct {
 	Aid      int     `orm:"column(aid);pk"`
 	Balance  float64 `orm:"column(balance);default(0)"`
 	Integral int     `orm:"default(0)"`
-	User     *User   `orm:"rel(one);on_delete(cascade)"`
+	User     *User   `orm:"reverse(one)"`
 }
 
 //type Notice  struct {
@@ -39,4 +39,11 @@ type AccountInfo struct {
 
 func init() {
 	orm.RegisterModel(new(User), new(AccountInfo))
+}
+
+func ReadUser(uid int) User {
+	o := orm.NewOrm()
+	user := User{Uid: uid}
+	o.Read(&user)
+	return user
 }

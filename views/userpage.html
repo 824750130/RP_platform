@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <link rel="stylesheet" href="../static/css/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/userpage.css">
+</head>
+<body>
+    <div class="container main">
+        <div class="user-info">
+            <image class="avatar col-xs-2" src="{{.avatarUrl}}"/>
+            <div>
+                <div class="uid"><span>id:{{.uid}}</span></div>
+                <div class="username"><span>{{.username}}</span></div>
+                <div class="balance"><span>余额：{{.balance}}</span> <a href="">充值</a></div>
+                <div class="integral"><span>积分：{{.integral}}</span></div>
+            </div>
+        </div>
+
+        <div class="f-list">
+            <div><a href="">最新活动>></a></div>
+            <div><a href="">抵用券库>></a></div>
+            <div><a href="">邀请好友>></a></div>
+            <div><a href="">好友列表>></a></div>
+            <div><a href="">客服微信>></a></div>
+        </div>
+        <div class="explain">
+            <span style="font-weight: 900">规则说明：</span>
+                <div>&emsp;邀请好友：将本平台推广向好友，经推荐的好友进行平台充值可以获得50%相对应积分收入本账户</div>
+        </div>
+    </div>
+</body>
+</html>
